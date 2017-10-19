@@ -1,6 +1,8 @@
 var app = function(){
   var canvas = document.querySelector("#main-canvas")
   var stepSizeDisplay = document.querySelector("#step-size")
+  var xDisplay = document.querySelector("#x-display")
+  var yDisplay = document.querySelector("#y-display")
   var context = canvas.getContext('2d')
   context.strokeStyle = "black"
   context.fillStyle = "white"
@@ -22,15 +24,17 @@ var app = function(){
     context.fill()
   }
 
-  var radius = 30
-  drawButton(boundLeft+margin+radius, boundDown-margin-radius, radius)
-  drawButton(boundRight-margin-radius, boundDown-margin-radius, radius)
-
-  var displayStepSize = function(){
-    stepSizeDisplay.innerText = stepSize
+  var drawButtons = function(){
+    var buttonRadius = 30
+    drawButton(boundLeft+margin+buttonRadius, boundDown-margin-buttonRadius, buttonRadius)
+    drawButton(boundRight-margin-buttonRadius, boundDown-margin-buttonRadius, buttonRadius)
   }
 
-  displayStepSize()
+  var updateDisplayedVariables = function(){
+    stepSizeDisplay.innerText = Math.round(stepSize*10)/10
+    xDisplay.innerText = Math.round(posX*10)/10
+    yDisplay.innerText = Math.round(posY*10)/10
+  }
 
   var drawLine = function(dx, dy){
     context.beginPath()
@@ -45,9 +49,13 @@ var app = function(){
     context.stroke()
   }
 
-  var clearCanvas = function(){
+  var clearAndRedrawCanvas = function(){
     context.clearRect(boundLeft, boundUp, boundRight-boundLeft, boundDown-boundUp)
+    drawButtons()
   }
+
+  clearAndRedrawCanvas()
+  updateDisplayedVariables()
 
   window.addEventListener('keydown', function(event){
     var code = event.code
@@ -81,11 +89,9 @@ var app = function(){
         break
       case "KeyZ":
         stepSize /= 1.5
-        displayStepSize()
         break
       case "KeyX":
         stepSize *= 1.5
-        displayStepSize()
         break
       case "KeyY":
         var dx = 3 * stepSize * (Math.random()-0.5)
@@ -93,9 +99,10 @@ var app = function(){
         drawLine(dx, dy)
         break
       case "Space":
-        clearCanvas()
+        clearAndRedrawCanvas()
         break
     }
+    updateDisplayedVariables()
   })
 }
 
