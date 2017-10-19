@@ -7,3 +7,8 @@ canvas {
   border: 50px solid red;
   background-color: lightgrey;
 }
+
+p {
+  margin: 0;
+  margin-left: 10px;
+}
